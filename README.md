@@ -10,23 +10,26 @@ IA via Gemini).
 > Datos 100% sinteticos, generados con fines de demostracion academica
 > (Universidad Nacional Mayor de San Marcos - UNMSM).
 
-## Archivos necesarios (no incluidos en este repo)
+## Archivos necesarios
 
-- `lima_callao_distritos_simple.geojson`: poligonos de distritos de Lima y Callao.
-- Carpeta de imagenes usadas en el dashboard (hero, galerias por categoria,
-  imagenes de campana). Los nombres de archivo esperados estan listados en
-  `IMAGENES_TEMA`, `IMAGENES_CAMPANA` e `IMAGEN_HERO` dentro de `app.py`.
+- `imagenes/`: carpeta con las imagenes del dashboard (hero, galerias por
+  categoria, imagenes de campana). Los nombres de archivo esperados estan
+  listados en `IMAGENES_TEMA`, `IMAGENES_CAMPANA` e `IMAGEN_HERO` dentro de
+  `app.py`. Si clonas el repo, la app las busca ahi automaticamente (no hace
+  falta configurar nada).
+- `lima_callao_distritos_simple.geojson`: poligonos de distritos de Lima y
+  Callao (no incluido en este repo; ver `GEOJSON_PATH` mas abajo).
 
 ## Configuracion
 
-La app lee estas rutas desde variables de entorno (si no las defines, usa por
-defecto las rutas de Google Drive que se usan en el notebook de Colab del
-proyecto):
+La app lee estas rutas desde variables de entorno. Si no las defines, usa
+`imagenes/` (junto a `app.py`) para las imagenes, y la ruta de Drive del
+notebook de Colab para el geojson:
 
 | Variable         | Descripcion                                  |
 |------------------|-----------------------------------------------|
 | `GEOJSON_PATH`   | Ruta al archivo `.geojson` de distritos       |
-| `IMAGENES_DIR`   | Carpeta donde estan las imagenes del dashboard|
+| `IMAGENES_DIR`   | Carpeta donde estan las imagenes del dashboard (por defecto: `imagenes/` junto a `app.py`) |
 | `GEMINI_API_KEY` | (Opcional) API key de Gemini para generar posts con IA. Sin esto, la app usa plantillas fijas automaticamente. |
 
 **Nunca subas tu API key a este repo.** Configúrala como variable de entorno
@@ -42,24 +45,35 @@ pip install -r requirements.txt
 
 ```bash
 export GEOJSON_PATH="/ruta/a/lima_callao_distritos_simple.geojson"
-export IMAGENES_DIR="/ruta/a/tu/carpeta/de/imagenes/"
 export GEMINI_API_KEY="tu_clave_aqui"   # opcional
 
 streamlit run app.py
 ```
+(`IMAGENES_DIR` no hace falta definirla si clonaste el repo con la carpeta
+`imagenes/` incluida — la app la encuentra sola.)
 
 ## Ejecucion en Google Colab
 
-1. Monta Drive y coloca `app.py`, el `.geojson` y las imagenes en una misma
-   carpeta (por ejemplo `MyDrive/Mapa LM/`).
-2. Instala dependencias con version fija:
+1. Monta Drive y coloca `app.py` y el `.geojson` en una carpeta (por ejemplo
+   `MyDrive/Mapa LM/`). Las imagenes puedes dejarlas ahi tambien o usar las
+   del repo clonado.
+2. Antes de levantar Streamlit, fija las rutas de Drive por variable de
+   entorno (reemplaza el checkbox de Gemini API key de tus notebooks
+   anteriores por este bloque, que ahora incluye tambien las rutas):
+   ```python
+   import os
+   os.environ["GEOJSON_PATH"] = "/content/drive/MyDrive/Mapa LM/lima_callao_distritos_simple.geojson"
+   os.environ["IMAGENES_DIR"] = "/content/drive/MyDrive/Mapa LM/"
+   os.environ["GEMINI_API_KEY"] = "tu_clave_aqui"   # opcional
+   ```
+3. Instala dependencias con version fija:
    ```python
    !pip install -q streamlit==1.38.0 streamlit-folium==0.21.0 folium==0.17.0 \
        plotly==5.24.0 geopandas pandas numpy google-genai pillow-avif-plugin
    ```
-3. Levanta Streamlit y expon el puerto (recomendado: `cloudflared`, mas
+4. Levanta Streamlit y expon el puerto (recomendado: `cloudflared`, mas
    estable que `localtunnel` para este caso de uso).
-4. Abre la URL en una pestana nueva de incognito (evita reutilizar pestanas
+5. Abre la URL en una pestana nueva de incognito (evita reutilizar pestanas
    de corridas anteriores).
 
 ## Estructura del proyecto
@@ -67,4 +81,5 @@ streamlit run app.py
 ```
 app.py              # Dashboard completo (Streamlit)
 requirements.txt     # Dependencias con version fija
+imagenes/            # Imagenes usadas en el dashboard
 ```
