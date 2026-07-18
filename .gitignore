@@ -7,3 +7,8 @@ venv/
 logs.txt
 cloudflared.log
 .DS_Store
+
+# Datos/imagenes que no deben publicarse (derechos de autor sin confirmar,
+# o simplemente porque ya viven en Drive y no hace falta duplicarlas aqui)
+data/
+imagenes/
