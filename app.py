@@ -128,7 +128,9 @@ EMAILS_CONTACTO = [
 # ==============================================================================
 # AJUSTAR: carpeta en Drive donde subiras las imagenes. Mismo criterio que
 # GEOJSON_PATH: usa la ruta real de tu Drive montado.
-IMAGENES_DIR = os.environ.get("IMAGENES_DIR", "/content/drive/MyDrive/Mapa LM/")
+IMAGENES_DIR = os.environ.get(
+    "IMAGENES_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "imagenes")
+) + os.sep
 
 # Banner/hero general (cabecera de la app, estilo institucional).
 IMAGEN_HERO = "concientizacionareaverde.avif"
