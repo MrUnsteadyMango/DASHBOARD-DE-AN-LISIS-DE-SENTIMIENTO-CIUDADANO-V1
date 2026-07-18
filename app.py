@@ -79,7 +79,7 @@ except ImportError:
 # ==============================================================================
 
 st.set_page_config(
-    page_title="Sentimiento Ambiental - Lima Metropolitana",
+    page_title="SENTIMIENTO AMBIENTAL - MUNICIPALIDAD DE LIMA METROPOLITANA",
     layout="wide",
     initial_sidebar_state="expanded",
 )
