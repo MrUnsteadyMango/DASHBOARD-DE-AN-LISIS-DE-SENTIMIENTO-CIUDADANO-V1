@@ -101,7 +101,7 @@ if _en_colab():
     _GEOJSON_DEFAULT = "/content/drive/MyDrive/Mapa LM/lima_callao_distritos_simple.geojson"
     _IMAGENES_DEFAULT = "/content/drive/MyDrive/Mapa LM/"
 else:
-    _GEOJSON_DEFAULT = os.path.join(_DIR_APP, "lima_callao_distritos_simple.geojson")
+    _GEOJSON_DEFAULT = os.path.join(_DIR_APP, "data", "lima_callao_distritos_simple.geojson")
     _IMAGENES_DEFAULT = os.path.join(_DIR_APP, "imagenes") + os.sep
 
 GEOJSON_PATH = os.environ.get("GEOJSON_PATH", _GEOJSON_DEFAULT)
