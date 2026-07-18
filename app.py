@@ -85,9 +85,26 @@ st.set_page_config(
 )
 
 # Ruta al geojson. AJUSTAR segun tu entorno (Drive, local, etc.)
-GEOJSON_PATH = os.environ.get(
-    "GEOJSON_PATH", "/content/drive/MyDrive/Mapa LM/lima_callao_distritos_simple.geojson"
-)
+def _en_colab() -> bool:
+    """True si el script corre dentro de Google Colab (existe /content y la
+    variable de entorno que Colab siempre define)."""
+    return os.path.exists("/content") and "COLAB_RELEASE_TAG" in os.environ
+
+_DIR_APP = os.path.dirname(os.path.abspath(__file__))
+
+# En Colab usa tu Drive tal cual (cero cambios en tus notebooks). Fuera de
+# Colab (repo clonado, Streamlit Community Cloud, tu compu) usa los archivos
+# que esten junto a este mismo app.py -- asi funciona sin configurar nada
+# en ninguno de los dos entornos. GEOJSON_PATH/IMAGENES_DIR siguen siendo
+# sobreescribibles por variable de entorno si alguna vez lo necesitas.
+if _en_colab():
+    _GEOJSON_DEFAULT = "/content/drive/MyDrive/Mapa LM/lima_callao_distritos_simple.geojson"
+    _IMAGENES_DEFAULT = "/content/drive/MyDrive/Mapa LM/"
+else:
+    _GEOJSON_DEFAULT = os.path.join(_DIR_APP, "lima_callao_distritos_simple.geojson")
+    _IMAGENES_DEFAULT = os.path.join(_DIR_APP, "imagenes") + os.sep
+
+GEOJSON_PATH = os.environ.get("GEOJSON_PATH", _GEOJSON_DEFAULT)
 
 # Las 4 categorias del dashboard (criterio solicitado por la profesora)
 TEMAS = [
@@ -128,9 +145,7 @@ EMAILS_CONTACTO = [
 # ==============================================================================
 # AJUSTAR: carpeta en Drive donde subiras las imagenes. Mismo criterio que
 # GEOJSON_PATH: usa la ruta real de tu Drive montado.
-IMAGENES_DIR = os.environ.get(
-    "IMAGENES_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "imagenes")
-) + os.sep
+IMAGENES_DIR = os.environ.get("IMAGENES_DIR", _IMAGENES_DEFAULT)
 
 # Banner/hero general (cabecera de la app, estilo institucional).
 IMAGEN_HERO = "concientizacionareaverde.avif"
